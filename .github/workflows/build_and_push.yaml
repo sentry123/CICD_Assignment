@@ -30,6 +30,6 @@ jobs:
                 username: ${{ secrets.DOCKERHUB_UNAME }}
                 password: ${{ secrets.DOCKERHUB_SECRET }}
                 logout: true
-            - name: Push image
+            - name: Push image to Dockerhub
               run: |
                 docker push abhiseknanda1/local-builds:${{ github.ref_name }}
