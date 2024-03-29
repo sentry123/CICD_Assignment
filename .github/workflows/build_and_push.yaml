@@ -17,7 +17,7 @@ jobs:
         steps:
             - name: Build docker image
               run: |
-                docker build -t train-test:1 .
+                docker build -t train-test:1 -f ./Dockerfile .
     push:
         runs-on: ubuntu-latest
         steps:
