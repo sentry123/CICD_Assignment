@@ -2,16 +2,18 @@ FROM ubuntu:22.04
 
 ENV APP_HOME /app
 
-ENV TZ=Asia/Kolkata
-
 WORKDIR $APP_HOME
 
 COPY . $APP_HOME
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+RUN apt-get install -y tzdata
+
 RUN apt-get update && apt-get install -y software-properties-common gcc && \
     add-apt-repository -y ppa:deadsnakes/ppa
 
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get update && apt-get install -y python3.11 python3-distutils python3-pip python3-apt
+RUN apt-get update && apt-get install -y python3.11 python3-distutils python3-pip python3-apt
 
 RUN python3 -m pip install --no-cache-dir -r $APP_HOME/requirements.txt
 
