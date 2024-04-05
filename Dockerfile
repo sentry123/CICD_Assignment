@@ -2,6 +2,8 @@ FROM ubuntu:22.04
 
 ENV APP_HOME /app
 
+ENV TZ=Asia/Kolkata
+
 WORKDIR $APP_HOME
 
 COPY . $APP_HOME
