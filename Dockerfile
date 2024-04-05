@@ -15,9 +15,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
-    dpkg-reconfigure --frontend noninteractive tzdata
+# ENV DEBIAN_FRONTEND=noninteractive
+# RUN ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
+#     dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN python3.11 -m pip install --no-cache-dir -r $APP_HOME/requirements.txt
 
