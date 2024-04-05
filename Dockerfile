@@ -6,12 +6,12 @@ WORKDIR $APP_HOME
 
 COPY . $APP_HOME
 
-ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=Etc/UTC
-RUN apt-get install -y tzdata
-
 RUN apt-get update && apt-get install -y software-properties-common gcc && \
     add-apt-repository -y ppa:deadsnakes/ppa
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -fs /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN apt-get update && apt-get install -y python3.11 python3-distutils python3-pip python3-apt
 
