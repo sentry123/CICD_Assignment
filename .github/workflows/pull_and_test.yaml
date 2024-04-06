@@ -3,7 +3,8 @@ name: Pull and Test
 on:
     workflow_run:
         workflows: ['Build and Push Image']
-        types: [completed]
+        types: 
+            - completed
 
 jobs:
     build:
