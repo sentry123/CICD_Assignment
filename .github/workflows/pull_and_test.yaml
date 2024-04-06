@@ -28,5 +28,17 @@ jobs:
                 docker pull ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest
             -
              name: Run image and test
+             id: run_container
              run: |
-                docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest
+                score=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
+                echo "::set-output name=score::$score"
+            - 
+             name: Check score
+             run: |
+                score="${{ steps.run_container.outputs.score }}"
+                if (( $(echo "$score > 0.5" | bc -l) )); then
+                    echo "Score is greater than 0.5. Pipeline passes."
+                else
+                    echo "Score is less than or equal to 0.5. Pipeline fails."
+                    exit 1
+                fi
