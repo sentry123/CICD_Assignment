@@ -1,11 +1,12 @@
 name: Pull and Test
 
 on:
-    repository_dispatch:
-      types: [build]
+    workflow_run:
+        workflows: ['Build and Push Image']
+        types: [completed]
 
 jobs:
-    test:
+    build:
         runs-on: ubuntu-latest
         steps:
             - 
@@ -23,9 +24,8 @@ jobs:
             -
              name: Pull image from registry
              run: |
-                docker pull ${{ secrets.DOCKERHUB_UNAME }}/local-builds:${{ github.event.client_payload.ref }}       
-            - 
-              name: Test image
-              run: |
-                docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:${{ github.event.client_payload.ref }}
-            
+                docker pull ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest
+            -
+             name: Run image and test
+             run: |
+                docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest

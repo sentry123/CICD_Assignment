@@ -33,10 +33,4 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                 push: true
-                tags: ${{ secrets.DOCKERHUB_UNAME }}/local-builds:${{ github.run_id }}
-            -
-              name: Repository Dispatch
-              uses: peter-evans/repository-dispatch@v3.0.0
-              with:
-                event-type: build
-                client-payload: '{"ref": "${{ github.run_id }}"}'
+                tags: ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest
