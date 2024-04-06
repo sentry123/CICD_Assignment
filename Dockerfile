@@ -35,4 +35,4 @@ RUN chmod +x entrypoint.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["$APP_HOME/entrypoint.sh"]
+ENTRYPOINT ["${APP_HOME}/entrypoint.sh"]
