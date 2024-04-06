@@ -36,7 +36,7 @@ jobs:
                 tags: ${{ secrets.DOCKERHUB_UNAME }}/local-builds:${{ github.run_id }}
             -
               name: Repository Dispatch
-              uses: peter-evans/repository-dispatch@v3
+              uses: peter-evans/repository-dispatch@v3.0.0
               with:
                 event-type: build
                 client-payload: '{"ref": "${{ github.run_id }}"}'
