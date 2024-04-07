@@ -9,8 +9,6 @@ y = df['Disease'].to_numpy()
 labels = np.sort(np.unique(y))
 y = np.array([np.where(labels == x) for x in y]).flatten()
 
-print('-----Running test.py-----')
-
 with open("model.pkl", 'rb') as f:
     model = pickle.load(f)
 
