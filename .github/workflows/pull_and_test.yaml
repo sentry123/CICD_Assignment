@@ -1,10 +1,12 @@
 name: Pull and Test
 
 on:
-    workflow_run:
-        workflows: ['Build and Push Image']
-        types: 
-            - completed
+    pull_request:
+        branches: []
+        paths-ignore:
+            - 'data/**'
+            - 'requirements.txt'
+            - 'README.md'
 
 jobs:
     build:
@@ -30,41 +32,11 @@ jobs:
              name: Run image and test
              # id: run_container
              run: |
-                docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
-
-             
-             #    OUTPUT=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
-             #    echo "Score:"
-             #    echo "$OUTPUT"
-             #    if (( $(echo "$OUTPUT < 0.50" | bc -l) )); then
-             #      echo "Insufficient Accuracy"
-             #      exit 1
-             #    fi
-             # shell: bash
-            
-            # - 
-            #  name: Check score
-            #  run: |
-            #     score="${{ steps.run_container.outputs.score }}"
-            #     if (( $(echo "$score > 0.5" | bc -l) )); then
-            #         echo "Score is greater than 0.5. Pipeline passes."
-            #     else
-            #         echo "Score is less than or equal to 0.5. Pipeline fails."
-            #     fi
-            # - 
-            #  name: Update PR status
-            #  uses: actions/github-script@v5
-            #  with:
-            #    github-token: ${{ secrets.GITHUB_TOKEN }}
-            #    script: |
-            #      const status = '${{ github.event.workflow_run.conclusion }}';
-            #      const prNumber = '${{ github.event.workflow_run.head_repository }}';
-            #      const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-            #      await octokit.request('POST /repos/:owner/:repo/statuses/:sha', {
-            #        owner: context.repo.owner,
-            #        repo: context.repo.repo,
-            #        sha: context.sha,
-            #        state: status === 'success' ? 'success' : 'failure',
-            #        description: status === 'success' ? 'Workflow succeeded' : 'Workflow failed',
-            #        context: 'CI'
-            #      });
+                OUTPUT=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
+                echo "Score:"
+                echo "$OUTPUT"
+                if (( $(echo "$OUTPUT < 0.50" | bc -l) )); then
+                  echo "Insufficient Accuracy"
+                  exit 1
+                fi
+             shell: bash
