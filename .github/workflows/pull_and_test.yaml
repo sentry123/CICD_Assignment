@@ -33,7 +33,10 @@ jobs:
                 OUTPUT=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
                 echo "Score:"
                 echo "$OUTPUT"
-                if [[ `echo "$OUTPUT 0.50" | awk '{print ($1 < $2)}'` == 1 ]]; then echo "Insufficient Accuracy" && exit 1; fi
+                if (( $(echo "$OUTPUT < 0.50" | bc -l) )); then
+                  echo "Insufficient Accuracy"
+                  exit 1
+                fi
             
             # - 
             #  name: Check score
