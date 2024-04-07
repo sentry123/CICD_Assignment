@@ -28,17 +28,35 @@ jobs:
                 docker pull ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest
             -
              name: Run image and test
-             id: run_container
+             # id: run_container
              run: |
-                score=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
-                echo "::set-output name=score::$score"
-            - 
-             name: Check score
-             run: |
-                score="${{ steps.run_container.outputs.score }}"
-                if (( $(echo "$score > 0.5" | bc -l) )); then
-                    echo "Score is greater than 0.5. Pipeline passes."
-                else
-                    echo "Score is less than or equal to 0.5. Pipeline fails."
-                    exit 1
-                fi
+                OUTPUT=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
+                echo "Score:"
+                echo "$OUTPUT"
+                if [[ `echo "$OUTPUT 0.50" | awk '{print ($1 < $2)}'` == 1 ]]; then echo "Insufficient Accuracy" && exit 1; fi
+            # - 
+            #  name: Check score
+            #  run: |
+            #     score="${{ steps.run_container.outputs.score }}"
+            #     if (( $(echo "$score > 0.5" | bc -l) )); then
+            #         echo "Score is greater than 0.5. Pipeline passes."
+            #     else
+            #         echo "Score is less than or equal to 0.5. Pipeline fails."
+            #     fi
+            # - 
+            #  name: Update PR status
+            #  uses: actions/github-script@v5
+            #  with:
+            #    github-token: ${{ secrets.GITHUB_TOKEN }}
+            #    script: |
+            #      const status = '${{ github.event.workflow_run.conclusion }}';
+            #      const prNumber = '${{ github.event.workflow_run.head_repository }}';
+            #      const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+            #      await octokit.request('POST /repos/:owner/:repo/statuses/:sha', {
+            #        owner: context.repo.owner,
+            #        repo: context.repo.repo,
+            #        sha: context.sha,
+            #        state: status === 'success' ? 'success' : 'failure',
+            #        description: status === 'success' ? 'Workflow succeeded' : 'Workflow failed',
+            #        context: 'CI'
+            #      });
