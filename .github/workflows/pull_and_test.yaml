@@ -30,7 +30,7 @@ jobs:
              name: Run image and test
              # id: run_container
              run: |
-                docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
+                docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest
 
              
              #    OUTPUT=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
