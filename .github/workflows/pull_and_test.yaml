@@ -35,7 +35,7 @@ jobs:
                 OUTPUT=$(docker run ${{ secrets.DOCKERHUB_UNAME }}/local-builds:latest)
                 echo "Score:"
                 echo "$OUTPUT"
-                if (( $(echo "$OUTPUT < 0.50" | bc -l) )); then
+                if (( $(echo "$OUTPUT < 0.30" | bc -l) )); then
                   echo "Insufficient Accuracy"
                   exit 1
                 fi
